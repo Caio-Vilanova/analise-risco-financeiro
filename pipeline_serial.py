@@ -340,17 +340,14 @@ def stage_report(
         "portfolio": portfolio
     }
 
-    import os
-    os.makedirs("reports", exist_ok=True)
-    with open(output_path, "w", encoding="utf-8") as f:
-        json.dump(report, f, indent=2, ensure_ascii=False)
+    print(json.dumps(report, indent=2, ensure_ascii=False))
 
     duration = time.perf_counter() - t0
     bench = BenchmarkResult(
         stage="report",
         duration_sec=round(duration, 4),
         assets_processed=len(metrics),
-        notes=f"salvo em {output_path}"
+        notes="output via stdout (ambiente online)"
     )
     return bench
 
@@ -416,9 +413,7 @@ def run_serial_pipeline(tickers: list[str] = ALL_ASSETS) -> dict:
     print(f"  {'TOTAL':<20} {total:>7.3f}s  100.0%")
     print("─" * 60)
 
-    # ── Salva benchmark ──
-    import os
-    os.makedirs("benchmarks", exist_ok=True)
+    # ── Benchmark JSON ──
     bench_data = {
         "mode": "serial",
         "timestamp": datetime.now().isoformat(),
@@ -426,11 +421,8 @@ def run_serial_pipeline(tickers: list[str] = ALL_ASSETS) -> dict:
         "stages": [asdict(b) for b in benchmarks],
         "n_assets": len(tickers)
     }
-    with open("benchmarks/benchmark_serial.json", "w") as f:
-        json.dump(bench_data, f, indent=2)
-
-    print(f"\n  Benchmark salvo em benchmarks/benchmark_serial.json")
-    print(f"  Relatório salvo em reports/report_serial.json\n")
+    print("\n  BENCHMARK JSON:")
+    print(json.dumps(bench_data, indent=2))
 
     return {
         "metrics": metrics,
