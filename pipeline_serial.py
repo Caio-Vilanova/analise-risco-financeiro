@@ -1,7 +1,7 @@
 """
 FinScan - Pipeline Serial de Análise de Risco de Portfólio
 Trabalho Acadêmico - Computação Paralela e Distribuída | Unieuro
-Aluno: Matheus Nery Walkowicz & Caio Vilanova
+Aluno: Matheus Nery Walkowicz
 
 Fase 1: Execução SERIALIZADA com instrumentação de tempo por etapa.
 Objetivo: estabelecer baseline para comparação com versão paralela.
@@ -413,16 +413,30 @@ def run_serial_pipeline(tickers: list[str] = ALL_ASSETS) -> dict:
     print(f"  {'TOTAL':<20} {total:>7.3f}s  100.0%")
     print("─" * 60)
 
-    # ── Benchmark JSON ──
-    bench_data = {
-        "mode": "serial",
-        "timestamp": datetime.now().isoformat(),
-        "total_sec": round(total, 4),
-        "stages": [asdict(b) for b in benchmarks],
-        "n_assets": len(tickers)
+    # ── Registro de tempo serial (baseline para comparação paralela) ──
+    print("\n" + "=" * 60)
+    print("  REGISTRO DE TEMPO SERIAL")
+    print("=" * 60)
+    print(f"  {'Etapa':<20} {'Tempo (s)':>10} {'% total':>8} {'Tipo':<12}")
+    print("  " + "-" * 56)
+    type_map = {
+        'fetch':           'I/O bound',
+        'compute_metrics': 'CPU bound',
+        'correlation':     'CPU bound',
+        'portfolio_risk':  'CPU bound',
+        'report':          'I/O bound',
     }
-    print("\n  BENCHMARK JSON:")
-    print(json.dumps(bench_data, indent=2))
+    for b in benchmarks:
+        pct = (b.duration_sec / total) * 100
+        tipo = type_map.get(b.stage, '')
+        print(f"  {b.stage:<20} {b.duration_sec:>10.4f} {pct:>7.1f}%  {tipo:<12}")
+    print("  " + "-" * 56)
+    print(f"  {'TOTAL SERIAL':<20} {total:>10.4f} {'100.0%':>8}")
+    print("=" * 60)
+    print(f"\n  Baseline registrado: {total:.4f}s")
+    print(f"  Gargalo principal : fetch ({(benchmarks[0].duration_sec/total*100):.1f}% do tempo)")
+    print(f"  Etapas paralelizaveis: fetch (asyncio), compute_metrics (multiprocessing)")
+    print()
 
     return {
         "metrics": metrics,
