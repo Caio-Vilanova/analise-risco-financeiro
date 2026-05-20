@@ -1,7 +1,7 @@
 """
 FinScan - Pipeline Serial de Análise de Risco de Portfólio
 Trabalho Acadêmico - Computação Paralela e Distribuída | Unieuro
-Aluno: Matheus Nery Walkowicz
+Aluno: Matheus Nery Walkowicz & Caio Vilanova
 
 Fase 1: Execução SERIALIZADA com instrumentação de tempo por etapa.
 Objetivo: estabelecer baseline para comparação com versão paralela.
