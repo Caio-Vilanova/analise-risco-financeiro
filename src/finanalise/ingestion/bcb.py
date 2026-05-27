@@ -28,7 +28,8 @@ class BCBClient:
         self.get = get
 
     def search_datasets(self, query: str = "selic", rows: int = 10) -> list[dict]:
-        response = self.get(self.CKAN_URL, params={"q": query, "rows": rows, "sort": "metadata_modified desc"}, timeout=30)
+        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"}
+        response = self.get(self.CKAN_URL, params={"q": query, "rows": rows, "sort": "metadata_modified desc"}, headers=headers, timeout=30)
         response.raise_for_status()
         return response.json().get("result", {}).get("results", [])
 
@@ -42,6 +43,7 @@ class BCBClient:
             params["dataInicial"] = start
         if end:
             params["dataFinal"] = end
-        response = self.get(self.SGS_URL.format(series_id=series_id), params=params, timeout=30)
+        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"}
+        response = self.get(self.SGS_URL.format(series_id=series_id), params=params, headers=headers, timeout=30)
         response.raise_for_status()
         return pd.DataFrame(response.json())

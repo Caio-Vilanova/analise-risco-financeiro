@@ -2,7 +2,7 @@ from finanalise.ingestion.bcb import BCBClient, BCB_CATALOG_SEARCHES, BCB_SGS_SE
 
 
 def test_bcb_client_parses_ckan_package_search():
-    def fake_get(url, params=None, timeout=30):
+    def fake_get(url, params=None, timeout=30, **kwargs):
         class Response:
             def raise_for_status(self):
                 return None

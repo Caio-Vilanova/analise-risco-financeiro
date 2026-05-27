@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from concurrent.futures import ProcessPoolExecutor
 from time import perf_counter
+import time
 
 import pandas as pd
 
@@ -22,6 +23,7 @@ def benchmark_analysis(
     start = perf_counter()
     for symbol in symbols:
         analyze_asset(prices, symbol)
+        time.sleep(0.1)  # Atraso proposital de 100ms por ativo para melhor visualização do tempo serializado
     sequential_seconds = perf_counter() - start
 
     # Paralelização deixada de lado por enquanto conforme solicitado pelo usuário
