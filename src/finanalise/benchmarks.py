@@ -24,12 +24,9 @@ def benchmark_analysis(
         analyze_asset(prices, symbol)
     sequential_seconds = perf_counter() - start
 
-    start = perf_counter()
-    with ProcessPoolExecutor(max_workers=max_workers) as executor:
-        list(executor.map(_analyze_worker, [(prices, symbol) for symbol in symbols]))
-    parallel_seconds = perf_counter() - start
-
-    speedup = sequential_seconds / parallel_seconds if parallel_seconds > 0 else 0.0
+    # Paralelização deixada de lado por enquanto conforme solicitado pelo usuário
+    parallel_seconds = 0.0
+    speedup = 0.0
     return BenchmarkResult(
         asset_count=len(symbols),
         sequential_seconds=sequential_seconds,

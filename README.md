@@ -115,7 +115,7 @@ uv run --with pytest pytest -q
 Resultado atual:
 
 ```text
-17 passed
+9 passed
 ```
 
 ## Observacoes

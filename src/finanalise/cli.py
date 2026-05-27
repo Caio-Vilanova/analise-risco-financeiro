@@ -164,12 +164,10 @@ class FinanaliseCLI:
         result = benchmark_analysis(self.db.load_prices(symbols), symbols)
         table = Table(title="Resumo da carteira")
         table.add_column("Ativos")
-        table.add_column("Tempo de analise")
-        table.add_column("Otimizacao")
+        table.add_column("Tempo Serializado")
         table.add_row(
             str(result.asset_count),
-            f"{result.parallel_seconds:.4f}s",
-            f"{result.speedup:.2f}x",
+            f"{result.sequential_seconds:.4f}s",
         )
         self.console.print(table)
 
