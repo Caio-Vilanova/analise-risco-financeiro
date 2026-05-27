@@ -1,232 +1,125 @@
-# Finanálise
+# Finanalise
 
-Sistema de análise financeira histórica utilizando paralelismo, multiprocessamento e manipulação de grandes volumes de dados.
+MVP backend de analise financeira historica com SQLite, APIs publicas e interface interativa no terminal usando Rich.
 
----
+## Funcionalidades
 
-## 📌 Sobre o Projeto
+- Banco SQLite local para precos historicos e series macroeconomicas.
+- Geracao de dados financeiros de demonstracao.
+- Importacao de CSV local.
+- Importacao automatica dos CSVs/ZIPs ja presentes no workspace.
+- Leitura de CSVs soltos e CSVs/TXTs compactados dentro de arquivos ZIP.
+- Consulta ao catalogo publico do Banco Central do Brasil via API CKAN.
+- Suporte a series SGS do BCB via API publica.
+- Sub-opcoes guiadas para buscas comuns no BCB e escolha de ativos.
+- Analise por ativo: retorno total, retorno medio diario, volatilidade, minimo, maximo e volume.
+- Comparacao de ativos.
+- Resumo da carteira com tempo de analise e indicador de otimizacao.
+- Geracao de graficos PNG com Matplotlib.
+- Interface visual 100% terminal com Rich.
+- Testes automatizados com pytest.
 
-O **Finanálise** é uma aplicação desenvolvida com foco em processamento paralelo e análise de dados financeiros históricos em larga escala.
+## Estrutura
 
-O sistema utiliza datasets públicos contendo milhões de registros financeiros para realizar comparações históricas, benchmarks de desempenho e análises estatísticas utilizando múltiplos núcleos do processador.
-
----
-
-## 🎯 Objetivo
-
-O objetivo do projeto é demonstrar na prática conceitos de:
-
-- Paralelismo
-- Multiprocessamento
-- Concorrência
-- Big Data
-- Processamento distribuído
-- Benchmark computacional
-
----
-
-## 🚀 Funcionalidades
-
-- Comparação de ativos financeiros
-- Análise histórica de ações
-- Processamento paralelo de datasets
-- Benchmark entre execução sequencial e paralela
-- Manipulação de grandes volumes de dados
-- Geração de estatísticas financeiras
-- Visualização gráfica de resultados
-
----
-
-## 🛠️ Tecnologias Utilizadas
-
-### Linguagem
-- Python 3.12+
-
-### Bibliotecas
-- Pandas
-- NumPy
-- Matplotlib
-- Multiprocessing
-- Concurrent Futures
-- PySpark
-
-### Banco de Dados
-- PostgreSQL
-- MongoDB
-
-### Infraestrutura
-- Docker
-- Apache Spark
-
----
-
-## 📂 Estrutura do Projeto
-
-```bash
-Finanalise/
-│
-├── data/
-│   ├── raw/
-│   ├── processed/
-│   └── external/
-│
-├── src/
-│   ├── parallel/
-│   ├── analytics/
-│   ├── benchmarks/
-│   ├── database/
-│   └── visualization/
-│
-├── notebooks/
-│
-├── tests/
-│
-├── docker/
-│
+```text
+.
+├── main.py
+├── pyproject.toml
 ├── requirements.txt
-│
-├── README.md
-│
-└── main.py
+├── src/
+│   └── finanalise/
+│       ├── analytics.py
+│       ├── benchmarks.py
+│       ├── cli.py
+│       ├── data.py
+│       ├── database.py
+│       ├── ingestion/
+│       │   ├── bcb.py
+│       │   └── kaggle.py
+│       ├── models.py
+│       └── visualization.py
+└── tests/
 ```
 
----
+## Como Executar
 
-## 📊 Bases de Dados
+No Windows, o caminho mais simples e:
 
-### Huge Stock Market Dataset
-Dataset contendo milhões de registros históricos de ações e ETFs.
+```bat
+run.bat
+```
 
-https://www.kaggle.com/datasets/borismarjanovic/price-volume-data-for-all-us-stocks-etfs
+O aplicativo cria o banco SQLite automaticamente e, se ele estiver vazio, procura ZIPs/CSVs no workspace, extrai uma amostra leve e injeta no SQLite. Se nao encontrar dados locais, carrega dados de demonstracao.
 
----
-
-### Crypto Historical Dataset
-Dataset histórico de criptomoedas.
-
-https://www.kaggle.com/datasets/mczielinski/bitcoin-historical-data
-
----
-
-### Banco Central do Brasil
-Indicadores econômicos oficiais.
-
-https://dadosabertos.bcb.gov.br/
-
----
-
-## 💾 Volume de Dados
-
-O sistema foi projetado para manipular:
-
-- Mais de 8GB de dados
-- Milhões de registros financeiros
-- Dados históricos em larga escala
-
----
-
-## ⚡ Paralelismo
-
-O processamento é dividido entre múltiplos processos independentes.
-
-### Exemplo
-
-| Processo | Responsabilidade |
-|----------|------------------|
-| Processo 1 | Ações |
-| Processo 2 | ETFs |
-| Processo 3 | Criptomoedas |
-| Processo 4 | Indicadores econômicos |
-
----
-
-## 📈 Benchmark de Performance
-
-O sistema realiza comparação entre:
-
-- Execução sequencial
-- Execução paralela
-- Uso de CPU
-- Tempo de processamento
-
-### Exemplo esperado
-
-| Método | Tempo |
-|--------|--------|
-| Sequencial | 18s |
-| Paralelo | 4s |
-
----
-
-## ▶️ Como Executar
-
-### Clone o repositório
+Com `uv`:
 
 ```bash
-git clone https://github.com/seuusuario/finanalise.git
+uv run python main.py
 ```
 
----
-
-### Entre na pasta do projeto
-
-```bash
-cd finanalise
-```
-
----
-
-### Instale as dependências
+Ou com ambiente Python tradicional:
 
 ```bash
 pip install -r requirements.txt
-```
-
----
-
-### Execute o projeto
-
-```bash
 python main.py
 ```
 
----
+## Fluxo Recomendado
 
-## 📋 Requisitos
+1. Execute `run.bat` ou `uv run python main.py`.
+2. Escolha `Ver ativos`.
+3. Rode analise, comparacao, resumo da carteira e geracao de graficos.
+4. Consulte o Banco Central somente quando quiser explorar dados macroeconomicos externos.
 
-- Python 3.12+
-- Processador multi-core
-- 8GB RAM ou superior
-- Espaço em disco para datasets massivos
+## APIs Publicas
 
----
+### Kaggle
 
-## 📚 Conceitos Aplicados
+Se os ZIPs do Kaggle ja estiverem no workspace, a aplicacao usa esses arquivos automaticamente. Tambem existe suporte interno a `kagglehub`, mas o fluxo principal nao exige que o usuario baixe nada pelo menu.
 
-- Concorrência
-- Paralelismo
-- Multiprocessamento
-- Big Data
-- Processamento distribuído
-- Análise financeira histórica
+```python
+import kagglehub
 
----
+path = kagglehub.dataset_download("autor/nome-do-dataset")
+```
 
-## 🔮 Melhorias Futuras
+O importador percorre o workspace, le `.csv` soltos e abre arquivos `.zip` para importar CSVs/TXTs internos para o SQLite. Para manter o primeiro uso rapido, a carga inicial usa uma amostra limitada dos arquivos locais.
 
-- Dashboard em tempo real
-- Machine Learning financeiro
-- Previsão de mercado
-- Integração com APIs financeiras
-- Processamento distribuído em cluster
+### Banco Central do Brasil
 
----
+O catalogo e consultado por:
 
-## 👨‍💻 Autores
-Caio Vinícius da Silva Vilanova 83420
+```text
+https://dadosabertos.bcb.gov.br/api/3/action/package_search
+```
 
+As series SGS usam:
 
+```text
+https://api.bcb.gov.br/dados/serie/bcdata.sgs.{series_id}/dados?formato=json
+```
 
-## 📄 Licença
+Na interface, o Banco Central tem sub-opcoes prontas:
 
-Este projeto foi desenvolvido para fins acadêmicos e educacionais.
+- Buscar datasets no catalogo: Selic, Cambio, Inflacao, PIB e Expectativas.
+- Consultar serie SGS: Selic diaria, IPCA mensal, Dolar comercial venda e Meta Selic.
+
+Tambem e possivel digitar outro termo quando necessario.
+
+## Testes
+
+```bash
+uv run --with pytest pytest -q
+```
+
+Resultado atual:
+
+```text
+9 passed
+```
+
+## Observacoes
+
+- O uso essencial nao exige configuracao manual nem download pelo menu.
+- O MVP nao depende de navegador para baixar dados; tudo foi planejado para uso via APIs publicas ou bibliotecas Python.
+- Os dados de demonstracao sao carregados automaticamente apenas se nenhum CSV/ZIP local compativel for encontrado.
