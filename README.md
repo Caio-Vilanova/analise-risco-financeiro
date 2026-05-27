@@ -110,7 +110,7 @@ Tambem e possivel digitar outro termo quando necessario.
 
 A aplicacao possui um modulo de analise de desempenho sequencial (serializada). Com a execucao de computacoes matematicas intensas e reais (CPU-bound) sobre os ativos da carteira, a medicao do tempo serializado na opcao **4 ("Resumo da carteira")** do CLI registrou o seguinte tempo de execucao real:
 
-- **Tempo Serializado**: `29.2797s`
+- **Tempo Serializado**: `105.0111s`
 
 ## Testes
 
